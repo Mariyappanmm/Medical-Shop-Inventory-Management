@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="style.js">
+    <title>Medicine Storage Management System</title>
+</head>
+<body>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Medicine Storage Management System</h1>
+            <p>Streamline your pharmacy operations with smart inventory control</p>
+        </div>
+
+        <div class="nav-tabs">
+            <a href="login"><button class="nav-tab " >👨‍💼 Admin</button></a>
+            <a href="st"><button class="nav-tab" >📦 Storage & Inventory</button></a>
+            <a href="bill"><button class="nav-tab" >💰 Billing</button></a>
+            <a href="sale"><button class="nav-tab">📊 Sales</button></a>
+        </div>
+        <!-- Billing Module -->
+
+        <script>
+    let currentBillItems = [];
+
+    function clearBill() {
+        currentBillItems = [];
+        updateBillDisplay();
+        document.getElementById('billTotal').innerText = 'Total: ₹0.00';
+    }
+
+    function updateBillDisplay() {
+        const container = document.getElementById('billItems');
+        container.innerHTML = '';
+        let total = 0;
+
+        currentBillItems.forEach((item, index) => {
+            const row = document.createElement('div');
+            row.innerHTML = `${item.name} (x${item.quantity}) - ₹${item.total.toFixed(2)}`;
+            container.appendChild(row);
+            total += item.total;
+        });
+
+        document.getElementById('billTotal').innerText = `Total: ₹${total.toFixed(2)}`;
+    }
+</script>
+
+        <div id="billing" class="module">
+            <h2>💰 Billing Module</h2>
+
+            <div class="form-grid">
+                <div>
+                    
+                    <h3>🧾 New Bill</h3>
+                    <div class="form-group">
+                        <label>Customer Name</label>
+                        <input type="text" id="customerName" placeholder="Enter customer name">
+                    </div>
+                    <div class="form-group">
+                        <label>Customer Phone</label>
+                        <input type="tel" id="customerPhone" placeholder="Enter phone number">
+                    </div>
+                    <div class="form-group">
+
+
+    <label>Select Medicine</label>
+    <select id="billMedicine">
+        <option value="">Select Medicine</option>
+        {% for med in medicines %}
+            <option value="{{ med['id'] }}" data-price="{{ med['unit_price'] }}">
+                {{ med['medicine_name'] }} - ₹{{ "%.2f"|format(med['unit_price']) }}
+            </option>
+        {% endfor %}
+    </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input type="number" id="billQuantity" placeholder="Enter quantity" min="1">
+                    </div>
+                    <button class="btn" onclick="addToBill()">Add to Bill</button>
+                </div>
+
+                <div class="bill-section">
+                    <h3>🧾 Current Bill</h3>
+                    <div id="billItems">
+                        <p style="color: #7f8c8d; text-align: center;">No items added yet</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Discount (%)</label>
+                        <input type="number" id="discount" placeholder="Enter discount percentage" min="0" max="100" onchange="calculateTotal()">
+                    </div>
+                    <div class="form-group">
+                        <label>Tax (%)</label>
+                        <input type="number" id="tax" placeholder="Enter tax percentage" min="0" value="18" onchange="calculateTotal()">
+                    </div>
+                    <div class="bill-total" id="billTotal">Total: ₹0.00</div>
+                    <button class="btn btn-success" onclick="generateBill()">Generate Bill</button>
+                    <button class="btn" onclick="clearBill()">Clear Bill</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+    <h3>📋 Billing History</h3>
+    <table id="billingHistoryTable">
+        <thead>
+            <tr>
+                <th>Bill ID</th>
+                <th>Customer Name</th>
+                <th>Date</th>
+                <th>Total Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bill in bills %}
+            <tr>
+                <td>{{ bill['bill_id'] }}</td>
+                <td>{{ bill['customer_name'] }}</td>
+                <td>{{ bill['billing_date'] }}</td>
+                <td>₹{{ "%.2f"|format(bill['total_amount']) }}</td>
+                <td>
+                    <button class="btn" onclick="viewBill(this)">View</button>
+                    <button class="btn" onclick="printBill(this)">Print</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

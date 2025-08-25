@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Medicine Storage Management System</h1>
+            <p>Streamline your pharmacy operations with smart inventory control</p>
+        </div>
+
+        <div class="nav-tabs">
+            <a href="login"><button class="nav-tab" >👨‍💼 Admin</button></a>
+            <a href="st"><button class="nav-tab" >📦 Storage & Inventory</button></a>
+            <a href="bill"><button class="nav-tab" >💰 Billing</button></a>
+            <a href="sale"><button class="nav-tab">📊 Sales</button></a>
+        </div>
+
+    <div class="container">
+        <h2>🔐 Admin Login</h2>
+        {% if error %}
+        <p style="color:red;">{{ error }}</p>
+        {% endif %}
+        <form method="POST">
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" name="username" required>
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" name="password" required>
+            </div>
+            <button class="btn" type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>

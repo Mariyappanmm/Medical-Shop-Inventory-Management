@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <title>Medicine Storage Management System</title>
+</head>
+<body>
+   <!--<script src="{{ url_for('static', filename='main.js') }}"></script>--> 
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Medicine Storage Management System</h1>
+            <p>Streamline your pharmacy operations with smart inventory control</p>
+        </div>
+
+        <div class="nav-tabs">
+            <a href="login"><button class="nav-tab " >👨‍💼 Admin</button></a>
+            <a href="st"><button class="nav-tab active" >📦 Storage & Inventory</button></a>
+            <a href="bill"><button class="nav-tab" >💰 Billing</button></a>
+            <a href="sale"><button class="nav-tab">📊 Sales</button></a>
+        </div>
+
+        <div id="storage" class="module">
+            <h2>📦 Storage & Inventory Module</h2>
+            
+            
+
+            <form method="GET" action="/search_medicine" style="margin-bottom: 20px;">
+    <input type="text" name="query" class="search-bar" placeholder="🔍 Search medicines..." required>
+    <button type="submit" class="btn">Search</button>
+</form>
+
+
+
+           <form method="POST" action="/add_medicine">
+    <div class="form-grid">
+        <div>
+            <h3>💊 Add New Medicine</h3>
+            <div class="form-group">
+                <label>Medicine Name</label>
+                <input type="text" name="medicine_name" required>
+            </div>
+            <div class="form-group">
+                <label>Generic Name</label>
+                <input type="text" name="generic_name" required>
+            </div>
+            <div class="form-group">
+                <label>Batch Number</label>
+                <input type="text" name="batch_no" required>
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" name="quantity" required>
+            </div>
+        </div>
+
+        <div>
+            <h3>📅 Medicine Details</h3>
+            <div class="form-group">
+                <label>Manufacturing Date</label>
+                <input type="date" name="mfg_date" required>
+            </div>
+            <div class="form-group">
+                <label>Expiry Date</label>
+                <input type="date" name="expiry_date" required>
+            </div>
+            <div class="form-group">
+<label>Storage Location</label>
+<select name="storage_location" required>
+    {% for zone in zones %}
+        <option value="{{ zone.zone_name }}">{{ zone.zone_name }}</option>
+    {% endfor %}
+</select>
+            </div>
+            <div class="form-group">
+                <label>Unit Price (₹)</label>
+                <input type="number" step="0.01" name="unit_price" required>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-success" type="submit">Add Medicine</button>
+</form>
+
+
+            <div class="table-container">
+                <h3>📋 Current Inventory</h3>
+<table id="inventoryTable">
+    <thead>
+        <tr>
+            <th>Medicine Name</th>
+            <th>Generic Name</th>
+            <th>Batch No.</th>
+            <th>Quantity</th>
+            <th>Expiry Date</th>
+            <th>Location</th>
+            <th>Unit Price</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for med in medicines %}
+        <tr>
+            <td>{{ med['medicine_name'] }}</td>
+            <td>{{ med['generic_name'] }}</td>
+            <td>{{ med['batch_no'] }}</td>
+            <td>{{ med['quantity'] }}</td>
+            <td>{{ med['expiry_date'] }}</td>
+            <td>{{ med['storage_location'] }}</td>
+            <td>₹{{ med['unit_price'] }}</td>
+            <td>
+                {% if med.expiry_date <= (now + timedelta(days=30)).strftime('%Y-%m-%d') %}
+                    <span style="color: red;">Expiring Soon</span>
+                {% else %}
+                    <span style="color: green;">No Expir Soon</span>
+                {% endif %}
+            </td>
+            <td>
+                
+                
+                 <a class="btnn" href="/edit_medicine/{{ med.id }}" class="btn"><button class="btnn" >Edit</button></a>
+                 <a class="btnn btn-dangerr" href="/delete_medicine/{{ med.id }}"  onclick="return confirm('Are you sure?');"><button class="btnn btn-dangerr">Delete</button></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+            </div>
+        </div>
+
+
+</body>
+</html>

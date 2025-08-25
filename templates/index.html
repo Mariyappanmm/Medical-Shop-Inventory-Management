@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <title>Medicine Storage Management System</title>
+</head>
+<body>
+    <script src="{{ url_for('static', filename='main.js') }}">
+
+    </script>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Medicine Storage Management System</h1>
+            <p>Streamline your pharmacy operations with smart inventory control</p>
+        </div>
+
+        <div class="nav-tabs">
+            <a href="login"><button class="nav-tab" >👨‍💼 Admin</button></a>
+            <a href="st"><button class="nav-tab" >📦 Storage & Inventory</button></a>
+            <a href="bill"><button class="nav-tab" >💰 Billing</button></a>
+            <a href="sale"><button class="nav-tab">📊 Sales</button></a>
+        </div>
+
+        <!-- Admin Module -->
+        <div id="admin" class="module active">
+            <h2>👨‍💼 Admin Module</h2>
+            
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3 id="totalUsers">{{ total_users }}</h3>
+        <p>Total Users</p>
+    </div>
+    <div class="stat-card">
+        <h3 id="totalZones">{{ total_zones }}</h3>
+        <p>Storage Zones</p>
+    </div>
+    <div class="stat-card">
+        <h3 id="totalMedicines">{{ total_medicines }}</h3>
+        <p>Total Medicines</p>
+    </div>
+    <div class="stat-card">
+        <h3 id="lowStockItems">{{ low_stock_items }}</h3>
+        <p>Low Stock Alerts</p>
+    </div>
+</div>
+
+            <div class="form-grid">
+                <div>
+<form method="POST" action="/add_staff">
+    <div class="form-group">
+        <label>Username</label>
+        <input type="text" name="staff_name" placeholder="Enter username" required>
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="Enter email" required>
+    </div>
+    <div class="form-group">
+        <label>Role</label>
+        <select name="role">
+            <option value="pharmacist">Pharmacist</option>
+            <option value="staff">Staff</option>
+            <option value="admin">Admin</option>
+        </select>
+    </div>
+    <button class="btn" type="submit">Add User</button>
+</form>
+
+                <div>
+                    <h3>🏪 Storage Zone Management</h3>
+                    <form method="POST" action="/add_zone">
+               <div class="form-group">
+                <label>Zone Name:</label>
+                <input type="text" name="zone_name" required>
+            </div>
+            <div class="form-group">
+                <label>Zone Type:</label>
+                <select name="zone_type">
+                    <option value="shelf">Shelf</option>
+                    <option value="cabinet">Cabinet</option>
+                    <option value="drawer">Drawer</option>
+                    <option value="refrigerator">Refrigerator</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Capacity:</label>
+                <input type="number" name="capacity" required>
+            </div>
+            <button class="btn" type="submit">Add Zone</button>
+        </form>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <h3>📋 Current Users</h3>
+<table id="usersTable">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in staff %}
+        <tr>
+            <td>{{ s.staff_name }}</td>
+            <td>{{ s.email }}</td>
+            <td>{{ s.role }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+            </div>
+        </div>
+
+</body>
+</html>

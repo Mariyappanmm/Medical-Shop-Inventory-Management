@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <title>Medicine Storage Management System</title>
+</head>
+<body>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Medicine Storage Management System</h1>
+            <p>Streamline your pharmacy operations with smart inventory control</p>
+        </div>
+
+        <div class="nav-tabs">
+            <a href="login"><button class="nav-tab" >👨‍💼 Admin</button></a>
+            <a href="st"><button class="nav-tab" >📦 Storage & Inventory</button></a>
+            <a href="bill"><button class="nav-tab" >💰 Billing</button></a>
+            <a href="sale"><button class="nav-tab">📊 Sales</button></a>
+        </div>
+
+ <div  class="module">
+        <h2>📝 Edit Medicine</h2>
+        <form method="POST" action="/update_medicine/{{ medicine.id }}">
+            <div class="form-group">
+                <label>Medicine Name</label>
+                <input type="text" name="medicine_name" value="{{ medicine.medicine_name }}" required>
+            </div>
+            <div class="form-group">
+                <label>Generic Name</label>
+                <input type="text" name="generic_name" value="{{ medicine.generic_name }}">
+            </div>
+            <div class="form-group">
+                <label>Batch Number</label>
+                <input type="text" name="batch_no" value="{{ medicine.batch_no }}">
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" name="quantity" value="{{ medicine.quantity }}">
+            </div>
+            <div class="form-group">
+                <label>Mfg Date</label>
+                <input type="date" name="mfg_date" value="{{ medicine.mfg_date }}">
+            </div>
+            <div class="form-group">
+                <label>Expiry Date</label>
+                <input type="date" name="expiry_date" value="{{ medicine.expiry_date }}">
+            </div>
+            <div class="form-group">
+                <label>Storage Location</label>
+                <select name="storage_location">
+                    {% for zone in zones %}
+                        <option value="{{ zone.zone_name }}" {% if zone.zone_name == medicine.storage_location %}selected{% endif %}>
+                            {{ zone.zone_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Unit Price (₹)</label>
+                <input type="number" step="0.01" name="unit_price" value="{{ medicine.unit_price }}">
+            </div>
+            <button type="submit" class="btn">Update</button>
+        </form>
+    </div>
+</body>
+</html>
+
+   
